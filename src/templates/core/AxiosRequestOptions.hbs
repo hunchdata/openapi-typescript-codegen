@@ -1,0 +1,8 @@
+{{>header}}
+
+import { AxiosProgressEvent } from 'axios';
+
+export type AxiosRequestOptions = {
+	readonly onUploadProgress?: (progress: AxiosProgressEvent) => void;
+	readonly signal?: AbortSignal;
+};

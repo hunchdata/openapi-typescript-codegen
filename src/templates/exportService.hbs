@@ -17,9 +17,12 @@ import type { {{{this}}} } from '../models/{{{this}}}';
 {{/each}}
 
 {{/if}}
-{{#notEquals @root.httpClient 'angular'}}
+{{#equals @root.httpClient 'angular'}}
+{{else equals @root.httpClient 'axios'}}
+import type { AxiosRequestOptions } from '../core/AxiosRequestOptions';
+{{else}}
 import type { CancelablePromise } from '../core/CancelablePromise';
-{{/notEquals}}
+{{/equals}}
 {{#if @root.exportClient}}
 {{#equals @root.httpClient 'angular'}}
 import { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -74,6 +77,9 @@ export class {{{name}}}{{{@root.postfix}}} {
 	{{#equals @root.httpClient 'angular'}}
 	public {{{name}}}({{>parameters}}): Observable<{{>result}}> {
 		return this.httpRequest.request({
+	{{else equals @root.httpClient 'axios'}}
+	public {{{name}}}({{>parameters}} options?: AxiosRequestOptions): Promise<{{>result}}> {
+		return this.httpRequest.request({
 	{{else}}
 	public {{{name}}}({{>parameters}}): CancelablePromise<{{>result}}> {
 		return this.httpRequest.request({
@@ -82,6 +88,9 @@ export class {{{name}}}{{{@root.postfix}}} {
 	{{#equals @root.httpClient 'angular'}}
 	public {{{name}}}({{>parameters}}): Observable<{{>result}}> {
 		return __request(OpenAPI, this.http, {
+	{{else equals @root.httpClient 'axios'}}
+	public static {{{name}}}({{>parameters}} options?: AxiosRequestOptions): Promise<{{>result}}> {
+		return __request(OpenAPI, {
 	{{else}}
 	public static {{{name}}}({{>parameters}}): CancelablePromise<{{>result}}> {
 		return __request(OpenAPI, {
@@ -144,6 +153,9 @@ export class {{{name}}}{{{@root.postfix}}} {
 				{{{code}}}: `{{{escapeDescription description}}}`,
 				{{/each}}
 			},
+			{{#equals @root.httpClient 'axios'}}
+			...options,
+			{{/equals}}
 			{{/if}}
 		});
 	}

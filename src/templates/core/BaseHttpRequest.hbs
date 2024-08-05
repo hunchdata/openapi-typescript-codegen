@@ -6,6 +6,11 @@ import type { Observable } from 'rxjs';
 
 import type { ApiRequestOptions } from './ApiRequestOptions';
 import type { OpenAPIConfig } from './OpenAPI';
+{{else equals @root.httpclient 'axios'}}
+import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { AxiosRequestOptions } from './AxiosRequestOptions';
+import type { CancelablePromise } from './CancelablePromise';
+import type { OpenAPIConfig } from './OpenAPI';
 {{else}}
 import type { ApiRequestOptions } from './ApiRequestOptions';
 import type { CancelablePromise } from './CancelablePromise';
@@ -25,6 +30,8 @@ export abstract class BaseHttpRequest {
 
 	{{#equals @root.httpClient 'angular'}}
 	public abstract request<T>(options: ApiRequestOptions): Observable<T>;
+	{{else equals @root.httpClient 'axios'}}
+	public abstract request<T>(options: ApiRequestOptions & AxiosRequestOptions): Promise<T>;
 	{{else}}
 	public abstract request<T>(options: ApiRequestOptions): CancelablePromise<T>;
 	{{/equals}}
