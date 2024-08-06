@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 
 import type { Client } from '../client/interfaces/Client';
+import { HttpClient } from '../HttpClient';
 import { writeFile } from './fileSystem';
 import type { Templates } from './registerHandlebarTemplates';
 import { writeClientIndex } from './writeClientIndex';
@@ -37,7 +38,7 @@ describe('writeClientIndex', () => {
             },
         };
 
-        await writeClientIndex(client, templates, '/', true, true, true, true, true, 'Service', '');
+        await writeClientIndex(client, templates, '/', HttpClient.FETCH, true, true, true, true, true, 'Service', '');
 
         expect(writeFile).toBeCalledWith(resolve('/', '/index.ts'), 'index');
     });

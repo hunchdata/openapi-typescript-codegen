@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 
 import type { Client } from '../client/interfaces/Client';
+import { HttpClient } from '../HttpClient';
 import { writeFile } from './fileSystem';
 import { isDefined } from './isDefined';
 import { Templates } from './registerHandlebarTemplates';
@@ -27,6 +28,7 @@ export const writeClientIndex = async (
     client: Client,
     templates: Templates,
     outputPath: string,
+    httpClient: HttpClient,
     useUnionTypes: boolean,
     exportCore: boolean,
     exportServices: boolean,
@@ -37,6 +39,7 @@ export const writeClientIndex = async (
     clientName?: string
 ): Promise<void> => {
     const templateResult = templates.index({
+        httpClient,
         exportCore,
         exportServices,
         exportModels,

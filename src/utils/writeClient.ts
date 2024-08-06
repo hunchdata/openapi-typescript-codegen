@@ -105,6 +105,7 @@ export const writeClient = async (
             client,
             templates,
             outputPath,
+            httpClient,
             useUnionTypes,
             exportCore,
             exportServices,
