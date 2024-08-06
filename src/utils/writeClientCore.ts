@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 
 import type { Client } from '../client/interfaces/Client';
-import type { HttpClient } from '../HttpClient';
+import { HttpClient } from '../HttpClient';
 import type { Indent } from '../Indent';
 import { copyFile, exists, writeFile } from './fileSystem';
 import { formatIndentation as i } from './formatIndentation';
@@ -41,7 +41,17 @@ export const writeClientCore = async (
     await writeFile(resolve(outputPath, 'ApiError.ts'), i(templates.core.apiError(context), indent));
     await writeFile(resolve(outputPath, 'ApiRequestOptions.ts'), i(templates.core.apiRequestOptions(context), indent));
     await writeFile(resolve(outputPath, 'ApiResult.ts'), i(templates.core.apiResult(context), indent));
-    await writeFile(resolve(outputPath, 'CancelablePromise.ts'), i(templates.core.cancelablePromise(context), indent));
+    if (context.httpClient === HttpClient.AXIOS) {
+        await writeFile(
+            resolve(outputPath, 'AxiosRequestOptions.ts'),
+            i(templates.core.axiosRequestOptions(context), indent)
+        );
+    } else {
+        await writeFile(
+            resolve(outputPath, 'CancelablePromise.ts'),
+            i(templates.core.cancelablePromise(context), indent)
+        );
+    }
     await writeFile(resolve(outputPath, 'request.ts'), i(templates.core.request(context), indent));
 
     if (isDefined(clientName)) {

@@ -10,6 +10,12 @@ import { BaseHttpRequest } from './BaseHttpRequest';
 import type { OpenAPIConfig } from './OpenAPI';
 import { OpenAPI } from './OpenAPI';
 import { request as __request } from './request';
+{{else equals @root.httpClient 'axios'}}
+import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { AxiosRequestOptions } from './AxiosRequestOptions';
+import { BaseHttpRequest } from './BaseHttpRequest';
+import type { OpenAPIConfig } from './OpenAPI';
+import { request as __request } from './request';
 {{else}}
 import type { ApiRequestOptions } from './ApiRequestOptions';
 import { BaseHttpRequest } from './BaseHttpRequest';
@@ -47,6 +53,14 @@ export class {{httpRequest}} extends BaseHttpRequest {
 	public override request<T>(options: ApiRequestOptions): Observable<T> {
 		return __request(this.config, this.http, options);
 	}
+	{{else equals @root.httpClient 'axios'}}
+	/**
+	 * Request method
+	 * @param options The request options from the service
+	 * @returns Promise<T>
+	 * @throws ApiError
+	 */
+	public override request<T>(options: ApiRequestOptions & AxiosRequestOptions): Promise<T> {
 	{{else}}
 	/**
 	 * Request method

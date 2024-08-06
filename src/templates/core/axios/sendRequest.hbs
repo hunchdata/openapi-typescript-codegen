@@ -1,15 +1,12 @@
 export const sendRequest = async <T>(
 	config: OpenAPIConfig,
-	options: ApiRequestOptions,
+	options: ApiRequestOptions & AxiosRequestOptions,
 	url: string,
 	body: any,
 	formData: FormData | undefined,
 	headers: Record<string, string>,
-	onCancel: OnCancel,
 	axiosClient: AxiosInstance
 ): Promise<AxiosResponse<T>> => {
-	const source = axios.CancelToken.source();
-
 	const requestConfig: AxiosRequestConfig = {
 		url,
 		headers,
@@ -17,11 +14,10 @@ export const sendRequest = async <T>(
 		method: options.method,
 		withCredentials: config.WITH_CREDENTIALS,
 		withXSRFToken: config.CREDENTIALS === 'include' ? config.WITH_CREDENTIALS : false,
-		cancelToken: source.token,
 		validateStatus: isSuccess,
+		signal: options.signal,
+		onUploadProgress: options.onUploadProgress
 	};
-
-	onCancel(() => source.cancel('The user aborted a request.'));
 
 	try {
 		return await axiosClient.request(requestConfig);
