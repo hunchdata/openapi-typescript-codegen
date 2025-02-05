@@ -74,8 +74,8 @@ export const getModelProperties = (
                 const model = getType(property.$ref);
                 models.push({
                     export: 'reference',
-                    type: model.type,
-                    base: model.base,
+                    type: property['x-enum-varname'] ? `${model.type}.${property['x-enum-varname']}` : model.type,
+                    base: property['x-enum-varname'] ? `${model.base}.${property['x-enum-varname']}` : model.base,
                     template: model.template,
                     link: null,
                     isNullable: model.isNullable || property.nullable === true,

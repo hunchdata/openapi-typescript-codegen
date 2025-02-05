@@ -55,4 +55,5 @@ export interface OpenApiSchema extends OpenApiReference, WithEnumExtension {
     externalDocs?: OpenApiExternalDocs;
     example?: any;
     deprecated?: boolean;
+    ['x-enum-varname']?: string;
 }
