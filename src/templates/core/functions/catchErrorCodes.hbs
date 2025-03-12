@@ -6,6 +6,7 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
 		401: 'Unauthorized',
 		403: 'Forbidden',
 		404: 'Not Found',
+		457: 'Coauthor Error',
 		500: 'Internal Server Error',
 		502: 'Bad Gateway',
 		503: 'Service Unavailable',
@@ -14,7 +15,14 @@ export const catchErrorCodes = (options: ApiRequestOptions, result: ApiResult): 
 
 	const error = errors[result.status];
 	if (error) {
-		throw new ApiError(options, result, error);
+		const code = result.status === 457 &&
+			typeof result.body === 'object' &&
+			result.body !== null &&
+			'code' in result.body
+			? result.body.code
+			: undefined;
+
+		throw new ApiError(options, result, error, code);
 	}
 
 	if (!result.ok) {
